@@ -1,9 +1,14 @@
 from django.shortcuts import render
 
+# from nsepython import nse_eq, nse_get_index_list, nse_eq_symbols, index_info, nse_list_stocks
 from django.shortcuts import HttpResponse
-# Create your views here.
 
 
-def home(request):
+def stock_select(request):
 
-    return HttpResponse("<h1> Welcome to my page</h1>")
+    return render(request, template_name="app/stock-select.html")
+
+
+def stock_track(request):
+
+    return render(request, template_name="app/stock-track.html")

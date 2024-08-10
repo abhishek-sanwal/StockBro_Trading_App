@@ -1,0 +1,44 @@
+<!-- Django is based on DRY principle (Don't repeat yourself.) -->
+<!-- Exxtends our base html templates. Includes that code here -->
+{% extends 'app/base.html' %}
+<!-- Load all static files -->
+{% load static %}
+
+<!-- Customize title for current html page using dtl -->
+{%block title %} Stock Tracker App {% endblock %}
+
+<!-- Customize CSS for current html page using dtl -->
+{% block style %}
+<style></style>
+{% endblock style %}
+
+<!-- Customize html body for current html page using dtl -->
+{% block body %}
+<div class="container">
+  <h1>Live Stock Tracker</h1>
+  <p>Select your favourite stocks.</p>
+  <form action="/stocktracker">
+    <label for="stockpicker">Select Stocks:</label>
+    <select
+      class="form-select form-select-lg mb-3"
+      multiple
+      aria-label="multiple select example"
+      name="stockpicker"
+    >
+      {% for i in stockpicker %}
+      <option value="{{i}}">{{i}}</option>
+      {% endfor %}
+    </select>
+    <br />
+    <div class="d-grid gap-2">
+      <input class="btn btn-primary" type="submit" value="Submit" />
+    </div>
+  </form>
+</div>
+
+{% endblock %}
+
+<!-- Customize Javascript for current html page using dtl -->
+{% block js %}
+<script></script>
+{% endblock js %}

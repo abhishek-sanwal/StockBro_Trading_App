@@ -15,3 +15,10 @@ db.sqlite3
 # Migrations files
 /*/migrations
 /*/*/migrations
+
+
+# Mac index files
+.DS_Store
+/*/.DS_Store
+/*/*/.DS_Store
+/*/*/*/.DS_Store
