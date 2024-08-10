@@ -1,0 +1,17 @@
+
+# Virtual environment
+.stockenv
+
+# Vim editor temp file
+.treadme.txt.swp
+
+# Db configuration file
+db.sqlite3
+
+# Python complied cache file
+/*/__pycache__
+/*/*/__pycache__
+
+# Migrations files
+/*/migrations
+/*/*/migrations
