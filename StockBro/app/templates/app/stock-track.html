@@ -50,25 +50,29 @@
         <thead>
           <tr>
             <th scope="col">SNo.</th>
-            <th scope="col">Stock</th>
-            <th scope="col">Price</th>
+            <th scope="col">Symbol</th>
+            <th scope="col">Company Name</th>
+            <th scope="col">Industry</th>
+            <th scope="col">Last Price</th>
             <th scope="col">Previous Close</th>
-            <th scope="col">Open</th>
-            <th scope="col">Change</th>
-            <th scope="col">Market Cap</th>
-            <th scope="col">Volume</th>
+            <th scope="col">Percent Change</th>
+            <th scope="col">Lower Circuit</th>
+            <th scope="col">Upper Circuit</th>
           </tr>
         </thead>
         <tbody>
-          {% for key, value in data.items %}
+          {% for stock_object in data %}
           <tr>
-            <th scope="row">{{forloop.counter}}</th>
-            <td>{{key}}</td>
-            <td id="{{key}}_price">{{ value|get:"Quote Price"|floatformat:4 }}</td>
-            <td id="{{key}}_prevprice">{{ value|get:"Previous Close"|floatformat:4 }}</td>
-            <td id="{{key}}_open">{{ value|get:"Open" }}</td>
-            <td id="{{key}}_change">
-              <script>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ data.symbol }} </td>
+            <td>{{data.companyName}}</td>
+            <td>{{ data.industry }}</td>
+            <td id="{{ data.symbol }}_price">{{ data.lastPrice|floatformat:4 }}</td>
+            <td id="{{ data.symbol }}_prevprice">{{ data.prevClose|floatformat:4 }}</td>
+            <td id="{{ data.symbol }}_percent_change">{{ data.percentChange }}</td>
+            <td id="{{ data.symbol }}_lowerCircuit"> {{ data.lowerCircuit }}
+              <td id="{{ data.symbol }}_upperCircuit"> {{ data.upperCircuit }}
+              <!-- <script>
                 var change = document.getElementById("{{key}}_price").innerHTML - document.getElementById(
                   "{{key}}_prevprice").innerHTML;
                 change = Number((change).toFixed(4));
@@ -81,10 +85,8 @@
                 } else {
                   document.getElementById("{{key}}_change").innerHTML = change;
                 }
-              </script>
+              </script> -->
             </td>
-            <td id="{{key}}_cap">{{ value|get:"Market Cap" }}</td>
-            <td id="{{key}}_vol">{{ value|get:"Volume" }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -101,7 +103,7 @@
   </div>
   </div>
   </div>
-  {{ room_name|json_script:"room-name" }}
+  <!-- {{ room_name|json_script:"room-name" }}
   <script>
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
     var queryString = window.location.search;
@@ -142,7 +144,7 @@
       }
     };
   </script>
-  
+   -->
 {% endblock %}
 
 <!-- Customize Javascript for current html page using dtl -->

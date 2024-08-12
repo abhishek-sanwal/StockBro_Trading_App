@@ -1,0 +1,71 @@
+<!-- Extend base template -->
+{% extends 'app/base.html' %}
+<!-- Load Static Files -->
+{% load static %}
+
+<!-- Customize title for Webpage -->
+{% block title %} Stock View App {% endblock %}
+
+<!-- Customize CSS -->
+{% block style %}
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  table,
+  th,
+  td {
+    border: 1px solid #ddd;
+  }
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+</style>
+{% endblock %}
+<!-- HTML Body -->
+{% block body %}
+<h1 style="text-align: center">This is our stock view App</h1>
+<table>
+  <thead>
+    <tr>
+      <th>S.No.</th>
+      <th>Symbol</th>
+      <th>Company Name</th>
+      <th>Industry</th>
+      <th>Last Price</th>
+      <th>Previous Close</th>
+      <th>Percent Change</th>
+      <th>Lower Circuit</th>
+      <th>Upper Circuit</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for stock in data %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ stock.symbol }}</td>
+      <td>{{ stock.companyName }}</td>
+      <td>{{ stock.industry }}</td>
+      <td>{{ stock.lastPrice |floatformat:4 }}</td>
+      <td>{{ stock.prevClose |floatformat:4 }}</td>
+      <td>{{ stock.percentChange |floatformat:4 }}</td>
+      <td>{{ stock.lowerCircuit |floatformat:4 }}</td>
+      <td>{{ stock.upperCircuit |floatformat:4 }}</td>
+    </tr>
+  </tbody>
+</table>
+{% endfor %} {% endblock %}

@@ -29,8 +29,8 @@
       aria-label="multiple select example"
       name="stockpicker"
     >
-      {% for i in stock_names %}
-      <option value="{{i}}">{{i}}</option>
+      {% for key, value in stock_names.items %}
+      <option value="{{ key }}">{{ value }}</option>
       {% endfor %}
     </select>
     <br />

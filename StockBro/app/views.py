@@ -1,20 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 
-
-from nsepython import nse_eq, nse_eq_names_symbols, nse_eq_symbols
-
-from django.shortcuts import HttpResponse
+from nsepython import nse_eq, nse_eq_names_symbols, nse_eq_names
 
 from threading import Thread
-from queue import Queue
+from collections import deque
 
 import time
+import json
+import pandas as pd
+
+from .models import Stockdeatils
 
 
 def stock_select(request):
 
     stock_names = nse_eq_names_symbols()
-    print(stock_names, "There are all stocks")
+
     return render(request, template_name="app/stock-select.html", context={
         "stock_names": stock_names
     })
@@ -23,7 +24,6 @@ def stock_select(request):
 def stock_track(request):
 
     stock_names = request.GET.getlist('stockpicker')
-    ans = dict()
 
     # print(stock_names)
 
@@ -37,9 +37,9 @@ def stock_track(request):
 
     # print("Total time taken by normal process is", endTime - startTime)
 
-    startTime = time.time()
+    # startTime = time.time()
     # Multithreading with Queue to perform more efficiently.
-    que = Queue()
+    que = deque()
     # Thread Pool
     threads = list()
 
@@ -47,8 +47,10 @@ def stock_track(request):
     for index in range(len(stock_names)):
 
         thread = Thread(target=lambda que,
-                        stock_name: que.put({stock_name: nse_eq(stock_name)}),
+                        stock_name: que.append({stock_name:
+                                                nse_eq(stock_name)}),
                         args=(que, stock_names[index]))
+
         threads.append(thread)
         thread.start()
 
@@ -57,15 +59,49 @@ def stock_track(request):
 
         thread.join()
 
+    ans = list()
     while que:
 
-        item = que.get()
-        ans.update(item)
+        stock = que.popleft()
 
-    endTime = time.time()
+        # Get the first key i.e. symbol of stock
+        symbol = next(iter(stock))
 
-    print("Total time taken by multithreading approach is ", endTime - startTime)
+        # Get rest attributes
+        companyName = stock[symbol]["info"]["companyName"]
+        industry = stock[symbol]["info"]["industry"]
+        prevClose = stock[symbol]["priceInfo"]["previousClose"]
+        lastPrice = stock[symbol]["priceInfo"]["lastPrice"]
+        percentChange = ((lastPrice - prevClose)/lastPrice)*100
+        lowerCircuit = stock[symbol]["priceInfo"]["lowerCP"]
+        upperCircuit = stock[symbol]["priceInfo"]["upperCP"]
 
-    return render(request, template_name="app/stock-track.html", context={
-        "data", ans
+        # Check wheather an stock_object of same symbol exists or not symbols should be unique
+        stock_object = Stockdeatils.objects.filter(
+            symbol__iexact=symbol).first()
+
+        # If no objects exists
+        if stock_object is None:
+
+            # Create an stock_object if it doesn't exists
+            stock_object = Stockdeatils(symbol=symbol, companyName=companyName,
+                                        industry=industry, prevClose=prevClose,
+                                        lastPrice=lastPrice, percentChange=percentChange,
+                                        lowerCircuit=lowerCircuit, upperCircuit=upperCircuit)
+        else:
+
+            # Do update the stock_object if it already exists
+            stock_object.lowerCircuit = lowerCircuit
+            stock_object.upperCircuit = upperCircuit
+            stock_object.prevClose = prevClose
+            stock_object.lastPrice = lastPrice
+            stock_object.percentChange = percentChange
+
+        # Persists change into the db
+        stock_object.save()
+
+        ans.append(stock_object)
+
+    return render(request, template_name="app/stock-view.html", context={
+        "data": ans
     })
