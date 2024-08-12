@@ -60,12 +60,13 @@
       <td>{{ stock.symbol }}</td>
       <td>{{ stock.companyName }}</td>
       <td>{{ stock.industry }}</td>
-      <td>{{ stock.lastPrice |floatformat:4 }}</td>
-      <td>{{ stock.prevClose |floatformat:4 }}</td>
-      <td>{{ stock.percentChange |floatformat:4 }}</td>
-      <td>{{ stock.lowerCircuit |floatformat:4 }}</td>
-      <td>{{ stock.upperCircuit |floatformat:4 }}</td>
+      <td>{{ stock.lastPrice |floatformat:2 }}</td>
+      <td>{{ stock.prevClose |floatformat:2 }}</td>
+      <td>{{ stock.percentChange |floatformat:2 }}</td>
+      <td>{{ stock.lowerCircuit |floatformat:2 }}</td>
+      <td>{{ stock.upperCircuit |floatformat:2 }}</td>
     </tr>
   </tbody>
+  {% endfor %}
 </table>
-{% endfor %} {% endblock %}
+{% endblock %}
