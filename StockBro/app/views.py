@@ -24,23 +24,7 @@ def stock_select(request):
 def stock_track(request):
 
     stock_names = request.GET.getlist('stockpicker')
-
-    # print(stock_names)
-
-    # startTime =  time.time()
-
-    # for stock in stock_names:
-
-    #     nse_eq(stock)
-
-    # endTime = time.time()
-
-    # print("Total time taken by normal process is", endTime - startTime)
-
-    # startTime = time.time()
-    # Multithreading with Queue to perform more efficiently.
     que = deque()
-    # Thread Pool
     threads = list()
 
     # Iterate over all stocks and create a new thread
@@ -102,6 +86,8 @@ def stock_track(request):
 
         ans.append(stock_object)
 
-    return render(request, template_name="app/stock-view.html", context={
-        "data": ans
-    })
+    return render(request,
+                  template_name="app/stock-view.html",
+                  context={
+                      "data": ans
+                  })
