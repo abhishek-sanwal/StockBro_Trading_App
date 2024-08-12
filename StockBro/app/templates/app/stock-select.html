@@ -5,7 +5,7 @@
 {% load static %}
 
 <!-- Customize title for current html page using dtl -->
-{%block title %} Stock Tracker App {% endblock %}
+{%block title %} Stock Picker App {% endblock %}
 
 <!-- Customize CSS for current html page using dtl -->
 {% block style %}
@@ -16,8 +16,12 @@
 {% block body %}
 <div class="container">
   <h1>Live Stock Tracker</h1>
+  <!-- <h1>
+    All the NSE Stocks has been listed. You can find and choose multiple stocks
+    to watch them out.
+  </h1> -->
   <p>Select your favourite stocks.</p>
-  <form action="/stocktracker">
+  <form action="/stock-track">
     <label for="stockpicker">Select Stocks:</label>
     <select
       class="form-select form-select-lg mb-3"
@@ -25,7 +29,7 @@
       aria-label="multiple select example"
       name="stockpicker"
     >
-      {% for i in stockpicker %}
+      {% for i in stock_names %}
       <option value="{{i}}">{{i}}</option>
       {% endfor %}
     </select>
