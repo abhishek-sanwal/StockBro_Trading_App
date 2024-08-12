@@ -11,10 +11,12 @@ db.sqlite3
 # Python complied cache file
 /*/__pycache__
 /*/*/__pycache__
+/*/*/__pycache__
 
 # Migrations files
 /*/migrations
 /*/*/migrations
+/*/*/__migrations__
 
 
 # Mac index files
