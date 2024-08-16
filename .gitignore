@@ -4,6 +4,9 @@
 
 # Vim editor temp file
 .treadme.txt.swp
+/*/.treadme.txt.swp
+/*/*/.treadme.txt.swp
+/*/*/*/.treadme.txt.swp
 
 # Db configuration file
 db.sqlite3
@@ -11,12 +14,12 @@ db.sqlite3
 # Python complied cache file
 /*/__pycache__
 /*/*/__pycache__
-/*/*/__pycache__
+/*/*/*/__pycache__
 
 # Migrations files
 /*/migrations
 /*/*/migrations
-/*/*/__migrations__
+/*/*/*/__migrations__
 
 
 # Mac index files
@@ -24,3 +27,8 @@ db.sqlite3
 /*/.DS_Store
 /*/*/.DS_Store
 /*/*/*/.DS_Store
+
+# Redis files
+dump.rdb
+/*/.dump.rdb
+/*/*/.dump.rdb
