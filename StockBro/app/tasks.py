@@ -1,29 +1,16 @@
-from django.shortcuts import render, HttpResponse
 
-from nsepython import nse_eq, nse_eq_names_symbols, nse_eq_names
-
-from threading import Thread
+from celery import shared_task
 from collections import deque
+from threading import Thread
 
-import time
-import json
-import pandas as pd
-
+from nsepython import nse_eq
 from .models import Stockdeatils
 
 
-def stock_select(request):
+@shared_task(bind=True)
+def update_stocks_data(self, stock_names):
 
-    stock_names = nse_eq_names_symbols()
-    # print(stock_names)
-    return render(request, template_name="app/stock-select.html", context={
-        "stock_names": stock_names
-    })
-
-
-def stock_track(request):
-
-    stock_names = request.GET.getlist('stockpicker')
+    print(stock_names)
     que = deque()
     threads = list()
 
@@ -86,8 +73,4 @@ def stock_track(request):
 
         ans.append(stock_object)
 
-    return render(request,
-                  template_name="app/stock-view.html",
-                  context={
-                      "data": ans
-                  })
+    return "Completed Task"
