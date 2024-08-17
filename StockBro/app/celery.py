@@ -21,14 +21,14 @@ app.config_from_object(settings, namespace="CELERY")
 
 # Schedule a task after 5 seconds to update the data
 app.conf.beat_schedule = {
-    "every-5-seconds": {
-        # Task functiond details
-        "task": "app.tasks.update_stocks_data",
-        # How many seconds?
-        "schedule": 5,
-        # Arguments to  task function
-        'args': (["20MICRONS"])
-    }
+    # "every-5-seconds": {
+    #     # Task functiond details
+    #     "task": "app.tasks.update_stocks_data",
+    #     # How many seconds?
+    #     "schedule": 5,
+    #     # Arguments to  task function
+    #     'args': (["20MICRONS"])
+    # }
 }
 
 app.autodiscover_tasks()

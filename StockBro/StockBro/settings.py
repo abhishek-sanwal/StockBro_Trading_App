@@ -31,9 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
     'app',
+
     'django_celery_results',
     'django_celery_beat',
+
+    'channels',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -71,7 +76,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'StockBro.wsgi.application'
-
+# Change dev-server to use  asgi
+ASGI_APPLICATION = 'StockBro.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -134,6 +140,16 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
 CELERY_TIMEZONE = "Asia/Kolkata"
 
-
+# Celery beat and backend configurations
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# Django Channels configurations
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}

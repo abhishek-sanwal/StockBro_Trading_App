@@ -6,6 +6,9 @@ from threading import Thread
 from nsepython import nse_eq
 from .models import Stockdeatils
 
+from channels.layers import get_channel_layer
+import asyncio
+
 
 @shared_task(bind=True)
 def update_stocks_data(self, stock_names):
@@ -72,5 +75,15 @@ def update_stocks_data(self, stock_names):
         stock_object.save()
 
         ans.append(stock_object)
+
+    channel_layer = get_channel_layer()
+    loop = asyncio.new_event_loop()
+
+    asyncio.set_event_loop(loop)
+
+    loop.run_until_complete(channel_layer.group_send("stock_track", {
+        'type': 'send_stock_update',
+        'message': ans,
+    }))
 
     return "Completed Task"

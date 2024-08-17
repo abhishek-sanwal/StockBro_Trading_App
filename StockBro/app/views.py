@@ -87,7 +87,9 @@ def stock_track(request):
         ans.append(stock_object)
 
     return render(request,
-                  template_name="app/stock-view.html",
+                  template_name='app/stock-view.html',
                   context={
-                      "data": ans
+                      'data': ans,
+                      'room_name': 'track',
+                      'selectedstock': stock_names
                   })
