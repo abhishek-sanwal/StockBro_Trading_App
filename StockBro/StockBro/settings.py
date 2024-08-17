@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
 
     'app',
+    'authy',
 
     'django_celery_results',
     'django_celery_beat',
@@ -131,6 +132,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# login and login redirect views configuration
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "select-stocks"
 
 # Celery Configurations
 

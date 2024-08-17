@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} {% endblock title %}</title>
+  </head>
+  <body>
+    <form method="post">
+      <!-- CSRF token -->
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">
+        <!-- Customize button Name -->
+        {% block button_name %} {% endblock %}
+      </button>
+    </form>
+    {% block body %} {% endblock %}
+  </body>
+</html>
