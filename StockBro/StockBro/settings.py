@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'StockBro.wsgi.application'
+# WSGI_APPLICATION = 'StockBro.wsgi.application'
 # Change dev-server to use  asgi
 ASGI_APPLICATION = 'StockBro.asgi.application'
 
@@ -133,8 +133,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # login and login redirect views configuration
-LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "select-stocks"
+LOGIN_URL = "authy:login"
+LOGIN_REDIRECT_URL = "stock-app:select-stocks"
 
 # Celery Configurations
 

@@ -11,7 +11,7 @@ def signup(request):
 
         form.save()
 
-        return redirect("login")
+        return redirect("authy:login")
 
     return render(request,
                   template_name="authy/signup.html",

@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -14,6 +14,7 @@ class Stockdeatils(models.Model):
     percentChange = models.FloatField(default=0.0)
     lowerCircuit = models.FloatField(default=0.0)
     upperCircuit = models.FloatField(default=0.0)
+    user = models.ManyToManyField(User, default=0)
 
     class Meta:
 

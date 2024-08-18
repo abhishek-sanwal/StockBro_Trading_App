@@ -19,6 +19,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'StockBro.settings')
 application = ProtocolTypeRouter({
     # Http protocol
     "http": get_asgi_application(),
+    # Web Socket protocol
     "websocket": AuthMiddlewareStack(
         URLRouter(
             websocket_urlpatterns

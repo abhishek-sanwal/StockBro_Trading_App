@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse
 
 from nsepython import nse_eq, nse_eq_names_symbols, nse_eq_names
-
+from asgiref.sync import sync_to_async
 from threading import Thread
 from collections import deque
 
@@ -10,10 +10,20 @@ import json
 import pandas as pd
 
 from .models import Stockdeatils
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 
 
+@sync_to_async
+def checkAuthenticated(request):
+
+    return request.user.is_authenticated
+
+
+@login_required
 def stock_select(request):
 
+    print(request.user.username)
     stock_names = nse_eq_names_symbols()
     # print(stock_names)
     return render(request, template_name="app/stock-select.html", context={
@@ -21,9 +31,15 @@ def stock_select(request):
     })
 
 
-def stock_track(request):
+async def stock_track(request):
+
+    logged_in = await checkAuthenticated(request)
+
+    if not logged_in:
+        return redirect("authy:login")
 
     stock_names = request.GET.getlist('stockpicker')
+    print(stock_names)
     que = deque()
     threads = list()
 

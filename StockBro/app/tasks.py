@@ -40,7 +40,7 @@ def update_stocks_data(self, stock_names):
 
         # Get the first key i.e. symbol of stock
         symbol = next(iter(stock))
-
+        print(symbol, stock)
         # Get rest attributes
         companyName = stock[symbol]["info"]["companyName"]
         industry = stock[symbol]["info"]["industry"]

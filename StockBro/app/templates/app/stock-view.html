@@ -35,9 +35,12 @@
     background-color: #f1f1f1;
   }
 </style>
+
 {% endblock %}
 <!-- HTML Body -->
 {% block body %}
+
+<script src="static 'app/js/stock-track.js'"></script>
 <h1 style="text-align: center">This is our stock view App</h1>
 <table>
   <thead>
@@ -69,4 +72,4 @@
   </tbody>
   {% endfor %}
 </table>
-{% endblock %}
+{% endblock %} {{ room_name|json_script:"room-name" }}
