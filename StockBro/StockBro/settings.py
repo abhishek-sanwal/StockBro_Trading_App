@@ -37,8 +37,10 @@ INSTALLED_APPS = [
 
     'django_celery_results',
     'django_celery_beat',
+    'daphne',
 
     'channels',
+    'rest_framework',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -76,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'StockBro.wsgi.application'
+WSGI_APPLICATION = 'StockBro.wsgi.application'
 # Change dev-server to use  asgi
 ASGI_APPLICATION = 'StockBro.asgi.application'
 
@@ -132,17 +134,21 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+'/////////////////////////////////// Added Configurations settings //////////////////////////////////////////////////////'
+
+
 # login and login redirect views configuration
 LOGIN_URL = "authy:login"
 LOGIN_REDIRECT_URL = "stock-app:select-stocks"
 
-# Celery Configurations
 
+# Celery Configurations
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
 CELERY_TIMEZONE = "Asia/Kolkata"
+
 
 # Celery beat and backend configurations
 CELERY_RESULT_BACKEND = "django-db"
