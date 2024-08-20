@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse
 
 from nsepython import nse_eq, nse_eq_names_symbols, nse_eq_names
-from asgiref.sync import sync_to_async
+from asgiref.sync import sync_to_async, async_to_sync
 from threading import Thread
 from collections import deque
 
@@ -31,12 +31,13 @@ def stock_select(request):
     })
 
 
-async def stock_track(request):
+# @async_to_sync
+# async def stock_track(request):
+def stock_track(request):
+    # logged_in = await checkAuthenticated(request)
 
-    logged_in = await checkAuthenticated(request)
-
-    if not logged_in:
-        return redirect("authy:login")
+    # if not logged_in:
+    #     return redirect("authy:login")
 
     stock_names = request.GET.getlist('stockpicker')
     print(stock_names)

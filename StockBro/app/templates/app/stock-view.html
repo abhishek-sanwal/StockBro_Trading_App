@@ -36,11 +36,11 @@
   }
 </style>
 
-{% endblock %}
+{% endblock %} {% block js %} {% endblock %}
 <!-- HTML Body -->
 {% block body %}
 
-<script src="static 'app/js/stock-track.js'"></script>
+<script src="{% static 'app/js/stock-track.js' %}"></script>
 <h1 style="text-align: center">This is our stock view App</h1>
 <table>
   <thead>
@@ -72,4 +72,4 @@
   </tbody>
   {% endfor %}
 </table>
-{% endblock %} {{ room_name|json_script:"room-name" }}
+{{ room_name|json_script:"room-name" }} {% endblock %}

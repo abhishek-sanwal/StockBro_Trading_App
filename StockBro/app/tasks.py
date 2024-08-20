@@ -5,6 +5,7 @@ from threading import Thread
 
 from nsepython import nse_eq
 from .models import Stockdeatils
+from .Serializers import StockSerializer
 
 from channels.layers import get_channel_layer
 import asyncio
@@ -70,15 +71,17 @@ def update_stocks_data(self, stock_names):
             stock_object.prevClose = prevClose
             stock_object.lastPrice = lastPrice
             stock_object.percentChange = percentChange
+            # stock_object.user.add(self.scope["user"])
 
         # Persists change into the db
         stock_object.save()
 
-        ans.append(stock_object)
+        serializer = StockSerializer(stock_object)
+        ans.append(serializer.data)
 
+    print("Done task", ans)
     channel_layer = get_channel_layer()
     loop = asyncio.new_event_loop()
-
     asyncio.set_event_loop(loop)
 
     loop.run_until_complete(channel_layer.group_send("stock_track", {

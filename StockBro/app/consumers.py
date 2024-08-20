@@ -29,14 +29,14 @@ class StockConsumer(AsyncWebsocketConsumer):
             PeriodicTask.objects.create(
                 interval=schedule,
                 name='every-10-seconds',
-                task="mainapp.tasks.update_stock",
+                task="app.tasks.update_stocks_data",
                 args=json.dumps([stockpicker]))
 
     @sync_to_async
     def addToStockDetail(self, stockpicker):
         user = self.scope["user"]
         for i in stockpicker:
-            stock, _ = Stockdeatils.objects.get_or_create(stock=i)
+            stock, _ = Stockdeatils.objects.get_or_create(symbol=i)
             stock.user.add(user)
 
     async def connect(self):
@@ -48,7 +48,7 @@ class StockConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-
+        print("Web socket connected successfully")
         # Parse query_string
         query_params = parse_qs(self.scope["query_string"].decode())
 
@@ -57,9 +57,9 @@ class StockConsumer(AsyncWebsocketConsumer):
 
         # add to celery beat
         await self.addToCeleryBeat(stockpicker)
-
+        print("Arrived 1st function")
         # add user to stockdetail
-        await self.addToStockDetail(stockpicker)
+        # await self.addToStockDetail(stockpicker)
 
         await self.accept()
 
@@ -85,13 +85,14 @@ class StockConsumer(AsyncWebsocketConsumer):
             task.save()
 
     async def disconnect(self, close_code):
-        await self.helper_func()
-
+        # await self.helper_func()
+        print("Disconnected function")
         # Leave room group
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
+        print("Disconnected Successfully")
 
     # Receive message from WebSocket
     async def receive(self, text_data):
@@ -102,7 +103,7 @@ class StockConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'send_update',
+                'type': 'send_stock_update',
                 'message': message
             }
         )
@@ -117,13 +118,14 @@ class StockConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def send_stock_update(self, event):
         message = event['message']
-        message = copy.copy(message)
+        # message = copy.copy(message)
+        print("We are recieving messages")
+        print(message, "Web socket message")
+        # user_stocks = await self.selectUserStocks()
 
-        user_stocks = await self.selectUserStocks()
-
-        keys = message.keys()
-        for key in list(keys):
-            if key not in user_stocks:
-                del message[key]
+        # keys = message.keys()
+        # for key in list(keys):
+        #     if key not in user_stocks:
+        #         del message[key]
         # Send message to WebSocket
         await self.send(text_data=json.dumps(message))
