@@ -59,15 +59,25 @@
   <tbody>
     {% for stock in data %}
     <tr>
-      <td>{{ forloop.counter }}</td>
+      <td id="{}">{{ forloop.counter }}</td>
       <td>{{ stock.symbol }}</td>
       <td>{{ stock.companyName }}</td>
       <td>{{ stock.industry }}</td>
-      <td>{{ stock.lastPrice |floatformat:2 }}</td>
-      <td>{{ stock.prevClose |floatformat:2 }}</td>
-      <td>{{ stock.percentChange |floatformat:2 }}</td>
-      <td>{{ stock.lowerCircuit |floatformat:2 }}</td>
-      <td>{{ stock.upperCircuit |floatformat:2 }}</td>
+      <td id="a{{ stock.symbol }}_lastPrice">
+        {{ stock.lastPrice |floatformat:2 }}
+      </td>
+      <td id="a{{ stock.symbol }}_prevClose">
+        {{ stock.prevClose |floatformat:2 }}
+      </td>
+      <td id="a{{ stock.symbol }}_percentChange">
+        {{ stock.percentChange |floatformat:2 }}
+      </td>
+      <td id="a{{ stock.symbol }}_lowerCircuit">
+        {{ stock.lowerCircuit |floatformat:2 }}
+      </td>
+      <td id="a{{ stock.symbol }}_upperCircuit">
+        {{ stock.upperCircuit |floatformat:2 }}
+      </td>
     </tr>
   </tbody>
   {% endfor %}

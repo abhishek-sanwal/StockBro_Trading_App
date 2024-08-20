@@ -2,7 +2,10 @@
 
 console.log(" Javascript is attached and running as well.");
 document.addEventListener("DOMContentLoaded", () => {
-  const roomName = JSON.parse(document.getElementById("room-name").textContent);
+  // Fetech Roomname passed as context from backend
+  const roomName = JSON.parse(document.querySelector("#room-name").textContent);
+
+  // Search for queryString i.e. StockNames
   let queryString = window.location.search;
   queryString = queryString.substring(1);
   // console.log(queryString);
@@ -17,11 +20,27 @@ document.addEventListener("DOMContentLoaded", () => {
       "?" +
       queryString
   );
-  // console.log(stockSocket + " Web socket is created");
+
   // Display and update the data as soon as we receives messages
   stockSocket.onmessage = function (e) {
-    console.log(e.data);
+    // console.log(e.data);
     const data = JSON.parse(e.data);
-    console.log(data);
+    // console.log(data, "Our data is this.");
+    for (element in data) {
+      element = data[element];
+      document.querySelector(`#a${element["symbol"]}_lastPrice`).textContent =
+        element.lastPrice;
+      document.querySelector(`#a${element["symbol"]}_prevClose`).textContent =
+        element.prevClose;
+      document.querySelector(
+        `#a${element["symbol"]}_percentChange`
+      ).textContent = element.lastPrice - element.prevClose;
+      document.querySelector(
+        `#a${element["symbol"]}_lowerCircuit`
+      ).textContent = element.lowerCircuit;
+      document.querySelector(
+        `#a${element["symbol"]}_upperCircuit`
+      ).textContent = element.upperCircuit;
+    }
   };
 });
