@@ -1,7 +1,14 @@
 // Javascript
 
-console.log(" Javascript is attached and running as well.");
-document.addEventListener("DOMContentLoaded", () => {
+// Strict mode on[ No undeclared variables allowed]
+"use strict";
+
+// Parse float number upto x decimals
+const uptoDecimals = (num, x) => {
+  return parseFloat(num, x);
+};
+
+const listener = document.addEventListener("DOMContentLoaded", () => {
   // Fetech Roomname passed as context from backend
   const roomName = JSON.parse(document.querySelector("#room-name").textContent);
 
@@ -25,22 +32,25 @@ document.addEventListener("DOMContentLoaded", () => {
   stockSocket.onmessage = function (e) {
     // console.log(e.data);
     const data = JSON.parse(e.data);
-    // console.log(data, "Our data is this.");
-    for (element in data) {
+    console.log(data, "Our data is this.");
+    for (let element in data) {
       element = data[element];
       document.querySelector(`#a${element["symbol"]}_lastPrice`).textContent =
-        element.lastPrice;
+        uptoDecimals(element.lastPrice, 2);
       document.querySelector(`#a${element["symbol"]}_prevClose`).textContent =
-        element.prevClose;
+        uptoDecimals(element.prevClose, 2);
       document.querySelector(
         `#a${element["symbol"]}_percentChange`
-      ).textContent = element.lastPrice - element.prevClose;
+      ).textContent = uptoDecimals(
+        ((element.lastPrice - element.prevClose) * 100) / element.lastPrice,
+        2
+      );
       document.querySelector(
         `#a${element["symbol"]}_lowerCircuit`
-      ).textContent = element.lowerCircuit;
+      ).textContent = uptoDecimals(element.lowerCircuit, 2);
       document.querySelector(
         `#a${element["symbol"]}_upperCircuit`
-      ).textContent = element.upperCircuit;
+      ).textContent = uptoDecimals(element.upperCircuit, 2);
     }
   };
 });

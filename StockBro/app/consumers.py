@@ -23,12 +23,12 @@ class StockConsumer(AsyncWebsocketConsumer):
             task.save()
         else:
             schedule, _ = IntervalSchedule.objects.get_or_create(
-                every=10,
+                every=1,
                 period=IntervalSchedule.SECONDS)
 
             PeriodicTask.objects.create(
                 interval=schedule,
-                name='every-10-seconds',
+                name='every-one-second',
                 task="app.tasks.update_stocks_data",
                 args=json.dumps([stockpicker]))
 
