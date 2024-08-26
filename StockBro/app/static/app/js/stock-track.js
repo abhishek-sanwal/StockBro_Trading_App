@@ -1,17 +1,47 @@
-// Javascript
-
 // Strict mode on[ No undeclared variables allowed]
 "use strict";
 
+// Should be imported from Configurations/ Environments
+const className = "room-name";
+const ChannelName = "stock";
+// Attributes that can change of stock data. That we need to update
+const changableEntites = [
+  "lastPrice",
+  "prevClose",
+  "lowerCircuit",
+  "upperCircuit",
+];
+
 // Parse float number upto x decimals
-const uptoDecimals = (num, x) => {
-  return parseFloat(num, x);
+const upto2Decimals = (num) => {
+  return parseFloat(num, 2);
 };
 
-const listener = document.addEventListener("DOMContentLoaded", () => {
-  // Fetech Roomname passed as context from backend
-  const roomName = JSON.parse(document.querySelector("#room-name").textContent);
+// A function to update attributes of stock data
+const updateData = (event) => {
+  // Parse the data from Json to Js object
+  const data = JSON.parse(event.data);
+  for (let element in data) {
+    element = data[element];
+    // For all entities other than percentage change
+    for (let entity in changableEntites) {
+      document.querySelector(`#a${element["symbol"]}_${entity}`).textContent =
+        upto2Decimals(element[entity]);
+    }
+    // Seperate logic for change in percentage
+    document.querySelector(`#a${element["symbol"]}_percentChange`).textContent =
+      upto2Decimals(
+        ((element.lastPrice - element.prevClose) * 100) / element.lastPrice
+      );
+  }
+};
 
+// Function to Create Socket Connection
+const createSocketConnection = () => {
+  // Fetch Roomname passed as context from backend
+  const roomName = JSON.parse(
+    document.querySelector(`#${className}`).textContent
+  );
   // Search for queryString i.e. StockNames
   let queryString = window.location.search;
   queryString = queryString.substring(1);
@@ -21,7 +51,7 @@ const listener = document.addEventListener("DOMContentLoaded", () => {
   const stockSocket = new WebSocket(
     "ws://" +
       window.location.host +
-      "/ws/stock/" +
+      `/ws/${ChannelName}/` +
       roomName +
       "/" +
       "?" +
@@ -29,28 +59,10 @@ const listener = document.addEventListener("DOMContentLoaded", () => {
   );
 
   // Display and update the data as soon as we receives messages
-  stockSocket.onmessage = function (e) {
-    // console.log(e.data);
-    const data = JSON.parse(e.data);
-    console.log(data, "Our data is this.");
-    for (let element in data) {
-      element = data[element];
-      document.querySelector(`#a${element["symbol"]}_lastPrice`).textContent =
-        uptoDecimals(element.lastPrice, 2);
-      document.querySelector(`#a${element["symbol"]}_prevClose`).textContent =
-        uptoDecimals(element.prevClose, 2);
-      document.querySelector(
-        `#a${element["symbol"]}_percentChange`
-      ).textContent = uptoDecimals(
-        ((element.lastPrice - element.prevClose) * 100) / element.lastPrice,
-        2
-      );
-      document.querySelector(
-        `#a${element["symbol"]}_lowerCircuit`
-      ).textContent = uptoDecimals(element.lowerCircuit, 2);
-      document.querySelector(
-        `#a${element["symbol"]}_upperCircuit`
-      ).textContent = uptoDecimals(element.upperCircuit, 2);
-    }
-  };
-});
+  stockSocket.onmessage = updateData(e);
+};
+
+const listener = document.addEventListener(
+  "DOMContentLoaded",
+  createSocketConnection
+);
